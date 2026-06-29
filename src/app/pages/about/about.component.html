@@ -1,0 +1,83 @@
+<!-- Hero -->
+<div class="page-hero about-hero">
+  <div class="about-hero-bg">
+    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=70" alt="" role="presentation" />
+    <div class="about-hero-overlay"></div>
+  </div>
+  <div class="container page-hero-content">
+    <p class="page-hero-label">Our Story</p>
+    <h1 class="page-hero-title">More Than a Restaurant.<br>A World of Flavors.</h1>
+    <p class="page-hero-subtitle">Born in Dhaka. Inspired by the world. Crafted for you.</p>
+  </div>
+</div>
+
+<!-- Mission -->
+<section class="section mission-section">
+  <div class="container">
+    <div class="mission-grid">
+      <div class="mission-text">
+        <span class="section-label" style="justify-content:flex-start">Our Philosophy</span>
+        <h2 class="section-title" style="text-align:left">Every Dish Is a Chapter</h2>
+        <span class="gold-line" style="margin:20px 0"></span>
+        <p>SAVORA was founded on a belief that food is the most universal language — a bridge between cultures, generations, and stories.</p>
+        <p>We don't serve "fusion." We serve authenticity — six distinct culinary traditions, each executed with the same commitment to craft, quality, and respect for origin.</p>
+        <p>Our chefs are not generalists. Each specialist trained in the traditions they cook. Our Bangladeshi kitchen is led by someone who grew up watching biryani cooked in Dhaka's old town. Our Thai kitchen is overseen by a chef from Chiang Mai. This is how we keep every flavor honest.</p>
+      </div>
+      <div class="mission-image">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=700&q=80" alt="SAVORA dining hall" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<app-statistics></app-statistics>
+
+<!-- Chefs -->
+<section class="section chefs-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">The Brigade</span>
+      <h2 class="section-title">Meet Our Chefs</h2>
+      <p class="section-subtitle">Fifteen culinary specialists, each a master of their tradition.</p>
+    </div>
+    <div class="chefs-grid">
+      @for (chef of chefs; track chef.name) {
+        <div class="chef-card glass-card">
+          <div class="chef-img-wrap">
+            <img [src]="chef.image" [alt]="chef.name" loading="lazy" />
+            <div class="chef-exp-badge">{{ chef.experience }}</div>
+          </div>
+          <div class="chef-info">
+            <h3 class="chef-name">{{ chef.name }}</h3>
+            <p class="chef-role">{{ chef.role }}</p>
+            <p class="chef-specialty">{{ chef.specialty }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section timeline-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Our Journey</span>
+      <h2 class="section-title">The SAVORA Story</h2>
+    </div>
+    <div class="timeline">
+      @for (item of timeline; track item.year) {
+        <div class="timeline-item">
+          <div class="timeline-year">{{ item.year }}</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <p>{{ item.event }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<app-newsletter></app-newsletter>

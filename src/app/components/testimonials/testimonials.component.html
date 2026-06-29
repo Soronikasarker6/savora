@@ -1,0 +1,56 @@
+<section class="section testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Reviews</span>
+      <h2 class="section-title">What Our Guests Say</h2>
+      <p class="section-subtitle">Stories from the people who matter most — our guests.</p>
+    </div>
+
+    @if (testimonials().length > 0) {
+      <div class="testimonial-carousel">
+        <div class="testimonial-track">
+          @for (item of testimonials(); track item.id; let i = $index) {
+            <div class="testimonial-card" [class.active]="activeIndex() === i"
+                 [style.transform]="'translateX(' + ((i - activeIndex()) * 100) + '%)'">
+              <div class="quote-mark">"</div>
+              <p class="testimonial-review">{{ item.review }}</p>
+              <div class="testimonial-stars">
+                @for (star of getStars(item.rating); track $index) {
+                  <span [class.filled]="star === 1">★</span>
+                }
+              </div>
+              <div class="testimonial-author">
+                <img [src]="item.avatar" [alt]="item.name" class="author-avatar" loading="lazy" />
+                <div class="author-info">
+                  <strong class="author-name">{{ item.name }}</strong>
+                  <span class="author-role">{{ item.role }}</span>
+                  <span class="author-date">{{ item.date }}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Controls -->
+        <div class="carousel-controls">
+          <button class="carousel-btn" (click)="prev()" aria-label="Previous testimonial">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+          </button>
+          <div class="carousel-dots">
+            @for (item of testimonials(); track item.id; let i = $index) {
+              <button class="dot" [class.active]="activeIndex() === i"
+                      (click)="goTo(i)" [attr.aria-label]="'Go to testimonial ' + (i + 1)"></button>
+            }
+          </div>
+          <button class="carousel-btn" (click)="next()" aria-label="Next testimonial">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</section>

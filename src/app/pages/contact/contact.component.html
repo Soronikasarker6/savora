@@ -1,0 +1,86 @@
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <p class="page-hero-label">Get in Touch</p>
+    <h1 class="page-hero-title">Contact Us</h1>
+    <p class="page-hero-subtitle">We'd love to hear from you. Reach us by phone, email, or walk right in.</p>
+  </div>
+</div>
+
+<section class="section contact-section">
+  <div class="container">
+    <div class="contact-grid">
+      <!-- Info -->
+      <div class="contact-info">
+        <div class="info-card glass-card">
+          <span class="info-icon">📍</span>
+          <h3>Our Location</h3>
+          <p>123 Gulshan Avenue, Dhaka 1212, Bangladesh</p>
+          <a href="https://maps.google.com" target="_blank" class="btn btn-outline btn-sm" rel="noopener">
+            Open in Maps
+          </a>
+        </div>
+
+        <div class="info-card glass-card">
+          <span class="info-icon">📞</span>
+          <h3>Call or WhatsApp</h3>
+          <p>
+            <a href="tel:+8801700000000">+880-1700-000000</a>
+          </p>
+          <a href="https://wa.me/8801700000000" target="_blank" class="btn btn-outline btn-sm whatsapp-btn" rel="noopener">
+            💬 WhatsApp Us
+          </a>
+        </div>
+
+        <div class="info-card glass-card">
+          <span class="info-icon">✉️</span>
+          <h3>Email Us</h3>
+          <p><a href="mailto:hello@savora.restaurant">hello&#64;savora.restaurant</a></p>
+          <p class="info-note">We respond within 24 hours.</p>
+        </div>
+
+        <!-- Hours -->
+        <div class="hours-card glass-card">
+          <h3>Opening Hours</h3>
+          <ul>
+            @for (h of hours; track h.day) {
+              <li>
+                <span class="day">{{ h.day }}</span>
+                <span class="time">{{ h.time }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <!-- Socials -->
+        <div class="socials-card glass-card">
+          <h3>Follow SAVORA</h3>
+          <div class="social-links">
+            @for (s of socials; track s.name) {
+              <a [href]="s.url" target="_blank" rel="noopener" class="social-link">
+                <span class="sn">{{ s.name }}</span>
+                <span class="sh">{{ s.handle }}</span>
+              </a>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-section">
+        <div class="map-placeholder glass-card">
+          <div class="map-inner">
+            <div class="map-pin">📍</div>
+            <h3>SAVORA Restaurant</h3>
+            <p>123 Gulshan Avenue, Dhaka</p>
+            <a href="https://maps.google.com/?q=Gulshan+Avenue+Dhaka" target="_blank"
+               class="btn btn-primary" rel="noopener">
+              Get Directions
+            </a>
+          </div>
+          <!-- Decorative map grid -->
+          <div class="map-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

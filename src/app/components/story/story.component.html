@@ -1,0 +1,49 @@
+<section class="section story-section">
+  <div class="container">
+    <div class="story-grid">
+      <!-- Images -->
+      <div class="story-images">
+        <div class="story-img-main">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80" alt="SAVORA dining experience" loading="lazy" />
+        </div>
+        <div class="story-img-secondary">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80" alt="Chef crafting a dish" loading="lazy" />
+          <div class="story-badge">
+            <span class="badge-year">Est.</span>
+            <span class="badge-number">2019</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="story-content">
+        <span class="section-label">Our Story</span>
+        <h2 class="section-title" style="text-align: left; margin-bottom: 0">Every Flavor<br>Has a Story.</h2>
+        <span class="gold-line" style="margin: 24px 0 24px"></span>
+
+        <p class="story-text">
+          SAVORA was born from a simple conviction: the world's great cuisines deserve to coexist — not compete. 
+          Our founders traveled across six culinary traditions to bring their finest expressions under one roof.
+        </p>
+        <p class="story-text">
+          From the slow-fire biryanis of Bengal to the wok mastery of Canton, from the aromatic herb gardens 
+          of Thailand to the wood-fired ovens of Naples — every dish is researched, refined, and made with purpose.
+        </p>
+
+        <div class="story-pillars">
+          @for (pillar of pillars; track pillar.title) {
+            <div class="pillar">
+              <span class="pillar-icon">{{ pillar.icon }}</span>
+              <div>
+                <h4 class="pillar-title">{{ pillar.title }}</h4>
+                <p class="pillar-text">{{ pillar.text }}</p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <a routerLink="/about" class="btn btn-primary">Discover Our Story</a>
+      </div>
+    </div>
+  </div>
+</section>

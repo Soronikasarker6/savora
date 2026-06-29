@@ -1,0 +1,162 @@
+<section class="section reservation-section" id="reserve">
+  <div class="reservation-bg">
+    <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=1920&q=60" alt="" role="presentation" loading="lazy" />
+    <div class="reservation-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="reservation-grid">
+      <!-- Info -->
+      <div class="reservation-info">
+        <span class="section-label" style="justify-content:flex-start">Reservations</span>
+        <h2 class="section-title" style="text-align:left; font-size: clamp(28px,3vw,44px)">Reserve Your<br>Experience</h2>
+        <span class="gold-line" style="margin: 20px 0"></span>
+
+        <p style="color: var(--color-text-muted); font-size:15px; line-height:1.8; margin-bottom:32px">
+          Every table at SAVORA tells a story. Reserve yours and we will craft an evening tailored to your occasion.
+        </p>
+
+        <div class="res-details">
+          <div class="res-detail">
+            <span class="res-icon">🕐</span>
+            <div>
+              <strong>Opening Hours</strong>
+              <span>Mon – Sun: 11:00 AM – 11:00 PM</span>
+            </div>
+          </div>
+          <div class="res-detail">
+            <span class="res-icon">📞</span>
+            <div>
+              <strong>Call Us</strong>
+              <span>+880-1700-000000</span>
+            </div>
+          </div>
+          <div class="res-detail">
+            <span class="res-icon">📍</span>
+            <div>
+              <strong>Location</strong>
+              <span>123 Gulshan Avenue, Dhaka</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form / Success -->
+      <div class="reservation-card glass-card">
+        @if (isSuccess()) {
+          <div class="success-state">
+            <div class="success-icon">✓</div>
+            <h3>Reservation Confirmed!</h3>
+            <p>Thank you. We have reserved your table and sent a confirmation to your email.</p>
+            <div class="confirmation-id">{{ confirmationId() }}</div>
+            <p class="success-note">Please save your confirmation ID. See you at SAVORA!</p>
+            <button class="btn btn-primary" (click)="resetForm()">Make Another Reservation</button>
+          </div>
+        } @else {
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <h3 class="form-title">Book a Table</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input id="firstName" type="text" formControlName="firstName"
+                       placeholder="Your first name" [class.is-invalid]="hasError('firstName')" />
+                @if (hasError('firstName')) {
+                  <span class="error-msg">First name is required (min 2 chars)</span>
+                }
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input id="lastName" type="text" formControlName="lastName"
+                       placeholder="Your last name" [class.is-invalid]="hasError('lastName')" />
+                @if (hasError('lastName')) {
+                  <span class="error-msg">Last name is required</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input id="email" type="email" formControlName="email"
+                       placeholder="your@email.com" [class.is-invalid]="hasError('email')" />
+                @if (hasError('email')) {
+                  <span class="error-msg">A valid email is required</span>
+                }
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone *</label>
+                <input id="phone" type="tel" formControlName="phone"
+                       placeholder="+880-..." [class.is-invalid]="hasError('phone')" />
+                @if (hasError('phone')) {
+                  <span class="error-msg">A valid phone number is required</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="date">Date *</label>
+                <input id="date" type="date" formControlName="date"
+                       [min]="reservationService.getMinDate()"
+                       [max]="reservationService.getMaxDate()"
+                       [class.is-invalid]="hasError('date')" />
+                @if (hasError('date')) {
+                  <span class="error-msg">Please select a date</span>
+                }
+              </div>
+              <div class="form-group">
+                <label for="time">Time *</label>
+                <select id="time" formControlName="time" [class.is-invalid]="hasError('time')">
+                  <option value="" disabled>Select time</option>
+                  @for (t of reservationService.availableTimes; track t.value) {
+                    <option [value]="t.value" [disabled]="!t.available">
+                      {{ t.label }}{{ !t.available ? ' (Fully booked)' : '' }}
+                    </option>
+                  }
+                </select>
+                @if (hasError('time')) {
+                  <span class="error-msg">Please select a time</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="guests">Guests *</label>
+                <select id="guests" formControlName="guests">
+                  @for (n of guestOptions; track n) {
+                    <option [value]="n">{{ n }} {{ n === 1 ? 'Guest' : 'Guests' }}</option>
+                  }
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="occasion">Occasion</label>
+                <select id="occasion" formControlName="occasion">
+                  @for (o of occasions; track o) {
+                    <option [value]="o">{{ o || 'Select occasion (optional)' }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="requests">Special Requests</label>
+              <textarea id="requests" formControlName="specialRequests"
+                        placeholder="Dietary requirements, seating preferences, allergies..."></textarea>
+            </div>
+
+            @if (errorMessage()) {
+              <div class="error-banner">{{ errorMessage() }}</div>
+            }
+
+            <button type="submit" class="btn btn-primary" style="width:100%"
+                    [disabled]="isSubmitting()">
+              {{ isSubmitting() ? 'Confirming...' : 'Confirm Reservation' }}
+            </button>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</section>

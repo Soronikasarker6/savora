@@ -1,0 +1,31 @@
+<section class="section categories-section" id="featured">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Explore</span>
+      <h2 class="section-title">Six Worlds of Flavor</h2>
+      <p class="section-subtitle">A single kitchen mastering six culinary traditions — each dish a chapter, every meal a story.</p>
+    </div>
+
+    <div class="categories-grid">
+      @for (cat of categories; track cat.slug) {
+        <a class="category-card glass-card"
+           [routerLink]="['/menu']"
+           [queryParams]="{category: cat.slug}"
+           [style.--cat-color]="cat.color">
+          <div class="cat-emoji">{{ cat.emoji }}</div>
+          <div class="cat-content">
+            <h3 class="cat-label">{{ cat.label }}</h3>
+            <p class="cat-desc">{{ cat.description }}</p>
+            <span class="cat-count">{{ cat.count }} dishes</span>
+          </div>
+          <div class="cat-arrow">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+          <div class="cat-glow"></div>
+        </a>
+      }
+    </div>
+  </div>
+</section>

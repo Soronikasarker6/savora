@@ -1,0 +1,75 @@
+<section class="section special-dishes">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Featured</span>
+      <h2 class="section-title">Chef's Selection</h2>
+      <p class="section-subtitle">Handpicked by our culinary team — signature dishes that define the SAVORA experience.</p>
+    </div>
+
+    <div class="dishes-grid">
+      @for (dish of featured(); track dish.id) {
+        <article class="dish-card" role="article">
+          <!-- Image -->
+          <div class="dish-image-wrap">
+            <img [src]="dish.image" [alt]="dish.name" class="dish-image" loading="lazy" />
+            <div class="dish-overlay"></div>
+
+            <!-- Badges -->
+            <div class="dish-badges">
+              @if (dish.isNew) {
+                <span class="badge badge-gold">New</span>
+              }
+              @if (dish.isFeatured) {
+                <span class="badge badge-gold">Chef's Pick</span>
+              }
+              @if (dish.isSpicy) {
+                <span class="badge badge-red">🌶 Spicy</span>
+              }
+              @if (dish.isVegetarian) {
+                <span class="badge badge-green">🌿 Veg</span>
+              }
+            </div>
+
+            <!-- Favorite -->
+            <button class="fav-btn"
+                    [class.active]="favorites().has(dish.id)"
+                    (click)="toggleFavorite(dish.id)"
+                    [attr.aria-label]="'Add ' + dish.name + ' to favorites'">
+              <svg width="18" height="18" viewBox="0 0 24 24" [attr.fill]="favorites().has(dish.id) ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.5">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Content -->
+          <div class="dish-content">
+            <div class="dish-meta">
+              <div class="dish-rating">
+                @for (star of getStars(dish.rating); track $index) {
+                  <span [class.filled]="star === 1">★</span>
+                }
+                <span class="review-count">({{ dish.reviewCount }})</span>
+              </div>
+              <span class="dish-category-tag">{{ dish.category | titlecase }}</span>
+            </div>
+
+            <h3 class="dish-name">{{ dish.name }}</h3>
+            <p class="dish-desc">{{ dish.description }}</p>
+
+            <div class="dish-footer">
+              <span class="dish-price">৳{{ dish.price }}</span>
+              <button class="btn btn-primary btn-sm" (click)="addToCart(dish)"
+                      [attr.aria-label]="'Add ' + dish.name + ' to cart'">
+                {{ cartService.isInCart(dish.id) ? 'Added ✓' : 'Add to Cart' }}
+              </button>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+
+    <div class="view-all-wrap">
+      <a routerLink="/menu" class="btn btn-outline btn-lg">View Full Menu</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,49 @@
+<section class="section gallery-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Visual Stories</span>
+      <h2 class="section-title">The SAVORA World</h2>
+    </div>
+
+    <!-- Filters -->
+    <div class="gallery-filters" role="group" aria-label="Gallery filters">
+      @for (f of filters; track f.id) {
+        <button class="filter-btn"
+                [class.active]="activeFilter() === f.id"
+                (click)="loadItems(f.id)">{{ f.label }}</button>
+      }
+    </div>
+
+    <!-- Grid -->
+    <div class="gallery-masonry">
+      @for (item of items(); track item.id) {
+        <div class="gallery-item" [class]="'span-' + (item.span || 'normal')" (click)="openLightbox(item)">
+          <img [src]="item.image" [alt]="item.title" loading="lazy" />
+          <div class="gallery-item-overlay">
+            <span class="gallery-item-title">{{ item.title }}</span>
+            <span class="gallery-zoom">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+@if (lightboxItem()) {
+  <div class="lightbox" (click)="closeLightbox()" role="dialog" aria-modal="true" [attr.aria-label]="lightboxItem()!.title">
+    <button class="lightbox-close" (click)="closeLightbox()" aria-label="Close lightbox">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <div class="lightbox-content" (click)="$event.stopPropagation()">
+      <img [src]="lightboxItem()!.image" [alt]="lightboxItem()!.title" />
+      <p class="lightbox-caption">{{ lightboxItem()!.title }}</p>
+    </div>
+  </div>
+}

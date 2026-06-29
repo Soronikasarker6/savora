@@ -1,0 +1,148 @@
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <p class="page-hero-label">Explore</p>
+    <h1 class="page-hero-title">Our Menu</h1>
+    <p class="page-hero-subtitle">Six cuisines. 120+ dishes. Every flavor tells a story worth savoring.</p>
+  </div>
+</div>
+
+<!-- Menu Controls -->
+<section class="menu-controls-section">
+  <div class="container">
+    <!-- Search -->
+    <div class="menu-search">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" placeholder="Search dishes..."
+             (input)="onSearch($any($event.target).value)"
+             aria-label="Search menu items" />
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="category-tabs" role="group" aria-label="Menu categories">
+      @for (cat of categories; track cat.id) {
+        <button class="cat-tab"
+                [class.active]="activeCategory() === cat.id"
+                (click)="setCategory(cat.id)">
+          <span class="cat-tab-icon">{{ cat.icon }}</span>
+          <span>{{ cat.label }}</span>
+        </button>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Menu Grid -->
+<section class="section menu-grid-section">
+  <div class="container">
+    @if (filteredItems().length === 0) {
+      <div class="empty-state">
+        <p>No dishes found matching your search. Try a different term or category.</p>
+        <button class="btn btn-outline" (click)="setCategory('all'); onSearch('')">Reset Filters</button>
+      </div>
+    } @else {
+      <div class="results-count">
+        Showing <strong>{{ filteredItems().length }}</strong> dishes
+      </div>
+      <div class="menu-grid">
+        @for (dish of filteredItems(); track dish.id) {
+          <article class="menu-card" (click)="openQuickView(dish)" role="button" [attr.aria-label]="'View ' + dish.name + ' details'">
+            <div class="menu-img-wrap">
+              <img [src]="dish.image" [alt]="dish.name" loading="lazy" />
+              <div class="menu-badges">
+                @if (dish.isNew) { <span class="badge badge-gold">New</span> }
+                @if (dish.isSpicy) { <span class="badge badge-red">🌶</span> }
+                @if (dish.isVegetarian) { <span class="badge badge-green">🌿</span> }
+              </div>
+              <button class="fav-btn"
+                      [class.active]="favorites().has(dish.id)"
+                      (click)="toggleFavorite(dish.id, $event)"
+                      [attr.aria-label]="'Favorite ' + dish.name">
+                <svg width="16" height="16" viewBox="0 0 24 24"
+                     [attr.fill]="favorites().has(dish.id) ? 'currentColor' : 'none'"
+                     stroke="currentColor" stroke-width="1.5">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <div class="menu-rating">
+                  @for (star of getStars(dish.rating); track $index) {
+                    <span [class.filled]="star === 1">★</span>
+                  }
+                  <span class="rc">({{ dish.reviewCount }})</span>
+                </div>
+                <span class="menu-cat-badge">{{ dish.category | titlecase }}</span>
+              </div>
+              <h3 class="menu-card-name">{{ dish.name }}</h3>
+              <p class="menu-card-desc">{{ dish.description }}</p>
+              @if (dish.calories) {
+                <p class="menu-calories">{{ dish.calories }} kcal</p>
+              }
+              <div class="menu-card-footer">
+                <span class="menu-price">৳{{ dish.price }}</span>
+                <button class="btn btn-primary btn-sm"
+                        (click)="addToCart(dish, $event)"
+                        [attr.aria-label]="'Add ' + dish.name + ' to cart'">
+                  {{ cartService.isInCart(dish.id) ? '✓ Added' : '+ Cart' }}
+                </button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Quick View Modal -->
+@if (quickViewItem()) {
+  <div class="quick-view-backdrop" (click)="closeQuickView()" role="dialog" aria-modal="true">
+    <div class="quick-view-modal" (click)="$event.stopPropagation()">
+      <button class="quick-view-close" (click)="closeQuickView()" aria-label="Close">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <div class="qv-image">
+        <img [src]="quickViewItem()!.image" [alt]="quickViewItem()!.name" />
+      </div>
+      <div class="qv-content">
+        <div class="qv-badges">
+          @if (quickViewItem()!.isNew) { <span class="badge badge-gold">New</span> }
+          @if (quickViewItem()!.isFeatured) { <span class="badge badge-gold">Chef's Pick</span> }
+          @if (quickViewItem()!.isSpicy) { <span class="badge badge-red">🌶 Spicy</span> }
+          @if (quickViewItem()!.isVegetarian) { <span class="badge badge-green">🌿 Vegetarian</span> }
+        </div>
+        <h2 class="qv-name">{{ quickViewItem()!.name }}</h2>
+        <div class="qv-rating">
+          @for (star of getStars(quickViewItem()!.rating); track $index) {
+            <span [class.filled]="star === 1">★</span>
+          }
+          <span>({{ quickViewItem()!.reviewCount }} reviews)</span>
+        </div>
+        <p class="qv-desc">{{ quickViewItem()!.description }}</p>
+        @if (quickViewItem()!.calories) {
+          <p class="qv-calories">{{ quickViewItem()!.calories }} kcal</p>
+        }
+        <div class="qv-tags">
+          @for (tag of quickViewItem()!.tags; track tag) {
+            <span class="qv-tag">#{{ tag }}</span>
+          }
+        </div>
+        <div class="qv-footer">
+          <span class="qv-price">৳{{ quickViewItem()!.price }}</span>
+          <button class="btn btn-primary"
+                  (click)="addToCart(quickViewItem()!, $event); closeQuickView()">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<app-newsletter></app-newsletter>

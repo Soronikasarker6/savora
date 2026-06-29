@@ -1,0 +1,82 @@
+<nav class="navbar" [class.scrolled]="isScrolled()" role="navigation" aria-label="Main navigation">
+  <div class="container navbar-inner">
+
+    <!-- Logo -->
+    <a routerLink="/" class="navbar-logo" aria-label="SAVORA — Home" (click)="closeMenu()">
+      <svg class="logo-mark" width="28" height="36" viewBox="-82 -170 234 348" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 18-170 C 74-170 118-144 118-100 C 118-68 98-46 64-30 L 20-10
+                 C-34 12-82 40-82 90 C-82 144-32 178 30 178
+                 C 80 178 118 158 134 128 C 142 112 144 94 144 78
+                 L 108 78 C 108 96 96 122 36 144
+                 C 0 156-26 148-44 134 C-58 122-46 108-18 100
+                 C-4 96 12 90 24 84 L 64 66
+                 C 114 44 152 12 152-38 C 152-104 100-152 28-166
+                 C 24-168 20-170 18-170 Z"
+              fill="currentColor"/>
+        <path d="M 128-116 C 132-130 134-148 128-164
+                 C 124-174 116-182 108-180 C 100-178 98-168 102-156
+                 C 106-144 108-132 106-120 C 116-120 122-118 128-116 Z"
+              fill="#0B0B0B"/>
+      </svg>
+      <span class="logo-wordmark">SAVORA</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <ul class="navbar-links" role="list">
+      @for (link of navLinks; track link.path) {
+        <li>
+          <a [routerLink]="link.path"
+             [routerLinkActiveOptions]="{ exact: link.exact }"
+             routerLinkActive="active"
+             class="nav-link">{{ link.label }}</a>
+        </li>
+      }
+    </ul>
+
+    <!-- Actions -->
+    <div class="navbar-actions">
+      <a routerLink="/reservations" class="btn btn-primary btn-sm hide-mobile">Reserve Table</a>
+
+      <!-- Cart -->
+      <button class="cart-btn" (click)="toggleCart()" aria-label="Shopping cart">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        @if (cartService.itemCount() > 0) {
+          <span class="cart-count">{{ cartService.itemCount() }}</span>
+        }
+      </button>
+
+      <!-- Hamburger -->
+      <button class="hamburger" [class.open]="isMenuOpen()" (click)="toggleMenu()"
+              aria-label="Toggle menu" [attr.aria-expanded]="isMenuOpen()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" [class.open]="isMenuOpen()" role="dialog" aria-label="Mobile navigation">
+  <div class="mobile-menu-inner">
+    <ul role="list">
+      @for (link of navLinks; track link.path) {
+        <li>
+          <a [routerLink]="link.path"
+             routerLinkActive="active"
+             class="mobile-nav-link"
+             (click)="closeMenu()">{{ link.label }}</a>
+        </li>
+      }
+      <li>
+        <a routerLink="/reservations" class="btn btn-primary" (click)="closeMenu()">Reserve Table</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Mobile Overlay -->
+<div class="mobile-overlay" [class.visible]="isMenuOpen()" (click)="closeMenu()"></div>

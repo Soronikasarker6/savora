@@ -1,0 +1,37 @@
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-inner glass-card">
+      <div class="newsletter-content">
+        <span class="section-label">Stay Connected</span>
+        <h2 class="newsletter-title">Get Exclusive Offers</h2>
+        <p class="newsletter-text">
+          Join the SAVORA inner circle. Early access to new menus, seasonal specials,
+          and exclusive dining events — delivered to your inbox.
+        </p>
+      </div>
+
+      <div class="newsletter-form-wrap">
+        @if (isSubmitted()) {
+          <div class="newsletter-success">
+            <span class="success-check">✓</span>
+            <p>Welcome to the circle. We'll be in touch soon.</p>
+          </div>
+        } @else {
+          <form class="newsletter-form" (ngSubmit)="onSubmit()" #newsletterForm="ngForm">
+            <div class="input-group">
+              <input type="email" name="email" [(ngModel)]="email" required
+                     placeholder="Your email address"
+                     aria-label="Email address for newsletter" />
+              <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+                {{ isLoading() ? '...' : 'Subscribe' }}
+              </button>
+            </div>
+            <p class="newsletter-disclaimer">
+              No spam. Unsubscribe any time. We respect your privacy.
+            </p>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</section>

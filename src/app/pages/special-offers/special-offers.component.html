@@ -1,0 +1,39 @@
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <p class="page-hero-label">Exclusive Deals</p>
+    <h1 class="page-hero-title">Special Offers</h1>
+    <p class="page-hero-subtitle">Crafted experiences at exceptional value. Every offer, a reason to return.</p>
+  </div>
+</div>
+
+<section class="section offers-section">
+  <div class="container">
+    <div class="offers-grid">
+      @for (offer of offers; track offer.title) {
+        <div class="offer-card glass-card">
+          <div class="offer-img">
+            <img [src]="offer.image" [alt]="offer.title" loading="lazy" />
+            <div class="offer-tag">{{ offer.tag }}</div>
+            <div class="offer-discount">{{ offer.discount }}</div>
+          </div>
+          <div class="offer-body">
+            <h3 class="offer-title">{{ offer.title }}</h3>
+            <p class="offer-desc">{{ offer.description }}</p>
+            <div class="offer-meta">
+              <span class="offer-valid">Valid: {{ offer.validUntil }}</span>
+            </div>
+            <div class="offer-code-wrap">
+              <span class="offer-code-label">Use code:</span>
+              <span class="offer-code">{{ offer.code }}</span>
+            </div>
+            <a routerLink="/reservations" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:16px">
+              Claim Offer
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<app-newsletter></app-newsletter>

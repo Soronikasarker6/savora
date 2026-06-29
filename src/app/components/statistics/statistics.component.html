@@ -1,0 +1,19 @@
+<section class="stats-section">
+  <div class="stats-bg">
+    <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=1920&q=60" alt="" role="presentation" loading="lazy" />
+    <div class="stats-overlay"></div>
+  </div>
+  <div class="container">
+    <div class="stats-grid">
+      @for (stat of stats; track stat.label; let i = $index) {
+        <div class="stat-item" [class.animated]="animated()">
+          <div class="stat-value">
+            {{ animated() ? counters()[i] : 0 | number }}{{ stat.suffix }}
+          </div>
+          <div class="stat-label">{{ stat.label }}</div>
+          <div class="stat-desc">{{ stat.description }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
