@@ -1,4 +1,9 @@
 import {
+  BrowserModule,
+  DomRendererFactory2
+} from "./chunk-BVMFAGOF.js";
+import "./chunk-MJKESJDV.js";
+import {
   AUTO_STYLE,
   AnimationGroupPlayer,
   AnimationMetadataType,
@@ -6,12 +11,7 @@ import {
   sequence,
   style,
   ɵPRE_STYLE
-} from "./chunk-QKRXUMMP.js";
-import {
-  BrowserModule,
-  DomRendererFactory2
-} from "./chunk-JSTYPYJL.js";
-import "./chunk-QXFFNV4E.js";
+} from "./chunk-WIXRXQF4.js";
 import {
   ANIMATION_MODULE_TYPE,
   DOCUMENT,
@@ -27,8 +27,8 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-BDNXNDFS.js";
-import "./chunk-RSS3ODKE.js";
+} from "./chunk-MTUW6OLT.js";
+import "./chunk-YBNECNG7.js";
 import {
   __objRest,
   __spreadValues
@@ -3773,8 +3773,7 @@ var WebAnimationsPlayer = class {
   // (since the _onStartFns and _onDoneFns get deleted after they are called)
   _originalOnDoneFns = [];
   _originalOnStartFns = [];
-  // using non-null assertion because it's re(set) by init();
-  domPlayer;
+  domPlayer = null;
   time = 0;
   parentPlayer = null;
   currentSnapshot = /* @__PURE__ */ new Map();
@@ -3795,26 +3794,34 @@ var WebAnimationsPlayer = class {
     }
   }
   init() {
-    this._buildPlayer();
+    if (!this._buildPlayer()) {
+      return;
+    }
     this._preparePlayerBeforeStart();
   }
   _buildPlayer() {
-    if (this._initialized) return;
+    if (this._initialized) return this.domPlayer;
     this._initialized = true;
     const keyframes = this.keyframes;
-    this.domPlayer = this._triggerWebAnimation(this.element, keyframes, this.options);
+    const animation = this._triggerWebAnimation(this.element, keyframes, this.options);
+    if (!animation) {
+      this._onFinish();
+      return null;
+    }
+    this.domPlayer = animation;
     this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : /* @__PURE__ */ new Map();
     const onFinish = () => this._onFinish();
-    this.domPlayer.addEventListener("finish", onFinish);
+    animation.addEventListener("finish", onFinish);
     this.onDestroy(() => {
-      this.domPlayer.removeEventListener("finish", onFinish);
+      animation.removeEventListener("finish", onFinish);
     });
+    return animation;
   }
   _preparePlayerBeforeStart() {
     if (this._delay) {
       this._resetDomPlayerState();
     } else {
-      this.domPlayer.pause();
+      this.domPlayer?.pause();
     }
   }
   _convertKeyframesToObject(keyframes) {
@@ -3826,7 +3833,12 @@ var WebAnimationsPlayer = class {
   }
   /** @internal */
   _triggerWebAnimation(element, keyframes, options) {
-    return element.animate(this._convertKeyframesToObject(keyframes), options);
+    const keyframesObject = this._convertKeyframesToObject(keyframes);
+    try {
+      return element.animate(keyframesObject, options);
+    } catch {
+      return null;
+    }
   }
   onStart(fn) {
     this._originalOnStartFns.push(fn);
@@ -3840,7 +3852,10 @@ var WebAnimationsPlayer = class {
     this._onDestroyFns.push(fn);
   }
   play() {
-    this._buildPlayer();
+    const player = this._buildPlayer();
+    if (!player) {
+      return;
+    }
     if (!this.hasStarted()) {
       this._onStartFns.forEach((fn) => fn());
       this._onStartFns = [];
@@ -3849,14 +3864,15 @@ var WebAnimationsPlayer = class {
         this._specialStyles.start();
       }
     }
-    this.domPlayer.play();
+    player.play();
   }
   pause() {
     this.init();
-    this.domPlayer.pause();
+    this.domPlayer?.pause();
   }
   finish() {
     this.init();
+    if (!this.domPlayer) return;
     if (this._specialStyles) {
       this._specialStyles.finish();
     }
@@ -3872,9 +3888,7 @@ var WebAnimationsPlayer = class {
     this._onDoneFns = this._originalOnDoneFns;
   }
   _resetDomPlayerState() {
-    if (this.domPlayer) {
-      this.domPlayer.cancel();
-    }
+    this.domPlayer?.cancel();
   }
   restart() {
     this.reset();
@@ -3896,12 +3910,17 @@ var WebAnimationsPlayer = class {
     }
   }
   setPosition(p) {
-    if (this.domPlayer === void 0) {
+    if (!this.domPlayer) {
       this.init();
     }
-    this.domPlayer.currentTime = p * this.time;
+    if (this.domPlayer) {
+      this.domPlayer.currentTime = p * this.time;
+    }
   }
   getPosition() {
+    if (!this.domPlayer) {
+      return this._initialized ? 1 : 0;
+    }
     return +(this.domPlayer.currentTime ?? 0) / this.time;
   }
   get totalTime() {
@@ -4023,7 +4042,13 @@ var BaseAnimationRenderer = class {
     this.delegate.insertBefore(parent, newChild, refChild);
     this.engine.onInsert(this.namespaceId, newChild, parent, isMove);
   }
-  removeChild(parent, oldChild, isHostElement) {
+  // TODO(thePunderWoman): remove the requireSynchronousElementRemoval flag after the
+  // animations package has been fully deleted post v23.
+  removeChild(parent, oldChild, isHostElement, requireSynchronousElementRemoval) {
+    if (requireSynchronousElementRemoval) {
+      this.delegate.removeChild(parent, oldChild, isHostElement, requireSynchronousElementRemoval);
+      return;
+    }
     if (this.parentNode(oldChild)) {
       this.engine.onRemove(this.namespaceId, oldChild, this.delegate);
     }
