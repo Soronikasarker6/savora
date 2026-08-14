@@ -155,7 +155,7 @@ src/
 - The reservation form simulates API submission — wire to a real backend endpoint in `reservation.service.ts`
 - The cart service uses Angular Signals for reactive state
 - Google Fonts (Cinzel + Poppins) load via CDN in `index.html`
-- Replace `+880-1700-000000` and address with real contact details
+- Replace `+880-1766-140895` and address with real contact details
 
 ---
 

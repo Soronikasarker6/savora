@@ -50,6 +50,6 @@ export class PrivacyPolicyComponent {
     { title: '4. Data Security', content: 'We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure.' },
     { title: '5. Cookies', content: 'We use cookies and similar tracking technologies to enhance your experience on our website. You can instruct your browser to refuse all cookies or indicate when a cookie is being sent. If you do not accept cookies, some portions of our website may not function properly.' },
     { title: '6. Your Rights', content: 'You have the right to access, correct, or delete your personal data at any time. You may also withdraw consent for marketing communications. To exercise these rights, please contact us at privacy@savora.restaurant.' },
-    { title: '7. Contact Us', content: 'If you have any questions about this Privacy Policy, please contact us at: SAVORA Restaurant, 123 Gulshan Avenue, Dhaka 1212, Bangladesh. Email: privacy@savora.restaurant. Phone: +880-1700-000000.' },
+    { title: '7. Contact Us', content: 'If you have any questions about this Privacy Policy, please contact us at: SAVORA Restaurant, 123 Gulshan Avenue, Dhaka 1212, Bangladesh. Email: privacy@savora.restaurant. Phone: +880-1766-140895.' },
   ];
 }
