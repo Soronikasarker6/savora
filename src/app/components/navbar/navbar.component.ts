@@ -51,4 +51,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
   toggleCart(): void {
     this.isCartOpen.update((v) => !v);
   }
+
+  cartWhatsAppLink(): string {
+    const lines = this.cartService.items().map(
+      (item) => `- ${item.quantity}x ${item.menuItem.name} (৳${item.menuItem.price} each)`
+    );
+    const message = [
+      "Hello SAVORA! I'd like to place an order:",
+      ...lines,
+      `Total: ৳${this.cartService.total()}`,
+      'https://soronikasarker6.github.io/savora/',
+    ].join('\n');
+    return `https://wa.me/8801766140895?text=${encodeURIComponent(message)}`;
+  }
 }

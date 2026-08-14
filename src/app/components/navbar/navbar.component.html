@@ -38,15 +38,65 @@
       <a routerLink="/reservations" class="btn btn-primary btn-sm hide-mobile">Reserve Table</a>
 
       <!-- Cart -->
-      <button class="cart-btn" (click)="toggleCart()" aria-label="Shopping cart">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 0 1-8 0"/>
-        </svg>
-        @if (cartService.itemCount() > 0) {
-          <span class="cart-count">{{ cartService.itemCount() }}</span>
-        }
-      </button>
+      <div class="cart-wrap">
+        <button class="cart-btn" (click)="toggleCart()" aria-label="Shopping cart"
+                [attr.aria-expanded]="isCartOpen()">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          @if (cartService.itemCount() > 0) {
+            <span class="cart-count">{{ cartService.itemCount() }}</span>
+          }
+        </button>
+
+        <div class="cart-panel" [class.open]="isCartOpen()" role="dialog" aria-label="Shopping cart">
+          <div class="cart-panel-header">
+            <h3>Your Cart</h3>
+            @if (cartService.items().length > 0) {
+              <button class="cart-clear" (click)="cartService.clearCart()">Clear</button>
+            }
+          </div>
+
+          @if (cartService.items().length === 0) {
+            <div class="cart-empty">
+              <p>Your cart is empty.</p>
+              <a routerLink="/menu" class="btn btn-outline btn-sm" (click)="toggleCart()">Browse Menu</a>
+            </div>
+          } @else {
+            <ul class="cart-items" role="list">
+              @for (item of cartService.items(); track item.menuItem.id) {
+                <li class="cart-item">
+                  <img [src]="item.menuItem.image" [alt]="item.menuItem.name" class="cart-item-img" loading="lazy" />
+                  <div class="cart-item-info">
+                    <span class="cart-item-name">{{ item.menuItem.name }}</span>
+                    <span class="cart-item-price">৳{{ item.menuItem.price }}</span>
+                  </div>
+                  <div class="cart-item-qty">
+                    <button (click)="cartService.updateQuantity(item.menuItem.id, item.quantity - 1)"
+                            aria-label="Decrease quantity">−</button>
+                    <span>{{ item.quantity }}</span>
+                    <button (click)="cartService.updateQuantity(item.menuItem.id, item.quantity + 1)"
+                            aria-label="Increase quantity">+</button>
+                  </div>
+                  <button class="cart-item-remove" (click)="cartService.removeItem(item.menuItem.id)"
+                          [attr.aria-label]="'Remove ' + item.menuItem.name">×</button>
+                </li>
+              }
+            </ul>
+
+            <div class="cart-panel-footer">
+              <div class="cart-total">
+                <span>Total</span>
+                <span>৳{{ cartService.total() }}</span>
+              </div>
+              <a [href]="cartWhatsAppLink()" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                Order via WhatsApp
+              </a>
+            </div>
+          }
+        </div>
+      </div>
 
       <!-- Hamburger -->
       <button class="hamburger" [class.open]="isMenuOpen()" (click)="toggleMenu()"
@@ -80,3 +130,6 @@
 
 <!-- Mobile Overlay -->
 <div class="mobile-overlay" [class.visible]="isMenuOpen()" (click)="closeMenu()"></div>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" [class.visible]="isCartOpen()" (click)="toggleCart()"></div>
