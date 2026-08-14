@@ -19,7 +19,7 @@ import { CartService } from '../../services/cart.service';
           <span class="fab-label">Reserve</span>
           <span class="fab-icon">🍽️</span>
         </a>
-        <a href="https://wa.me/8801766140895?text=Hello%20SAVORA!%20I'd%20like%20to%20know%20more%20about%20your%20menu%20and%20make%20a%20reservation.%20https%3A%2F%2Fsavora.vercel.app" target="_blank" class="fab-item" title="WhatsApp" (click)="toggle()">
+        <a href="https://wa.me/8801766140895?text=Hello%20SAVORA!%20I'd%20like%20to%20know%20more%20about%20your%20menu%20and%20make%20a%20reservation.%20https%3A%2F%2Fsoronikasarker6.github.io%2Fsavora%2F" target="_blank" class="fab-item" title="WhatsApp" (click)="toggle()">
           <span class="fab-label">WhatsApp</span>
           <span class="fab-icon">💬</span>
         </a>
